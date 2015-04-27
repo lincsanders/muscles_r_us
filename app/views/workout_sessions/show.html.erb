@@ -1,0 +1,49 @@
+<%= form_for(@workout_session) do |f| %>
+  <h4 class="col-xs-12">
+    <%= f.label :created_at, "Completed #{time_ago_in_words @workout_session.created_at} ago" %>
+  </h4>
+
+  <div class="form-group col-xs-12">
+    <%= f.label :workout %><br>
+    <%= f.select :workout_id, current_user.workouts.map{|w| [w.name, w.id]}, {}, id: 'workout-id', class: 'form-control', disabled: true %>
+  </div>
+
+  <div class="form-group col-xs-12">
+    <%= f.label :weight, 'Your Weight' %><br>
+    <div class="input-group">
+      <%= f.text_field :weight, class: 'form-control text-right', disabled: true %>
+      <div class="input-group-addon"><%= current_user.weight_units %></div>
+    </div>
+  </div>
+
+  <table class="table">
+    <tbody>
+      <% @workout_session.completed_workout.excersises.each do |excersise| %>
+  
+        <tr class="success">
+          <td colspan="100">
+            <label><h4><%= excersise.name %></h4></label>
+            <div class="pull-right form-group">
+              <label><h4>Weight: <%= excersise.weight %><%= current_user.weight_units %></h4></label>
+            </div>
+          </td>
+        </tr>
+  
+        <tr class="success">
+          <% excersise.rep_sets.each do |rep_set| %>
+            <td class="text-center rep-list">
+              <h1><span class="label <%=rep_set.was_started ? 'label-success' : 'label-danger' %>"><%= rep_set.completed_reps %></span></h1>
+            </td>
+          <% end %>
+        </tr>
+  
+      <% end %>
+    </tbody>
+  </table>
+
+  <div class="row">
+    <div class="col-xs-12">
+      <%= link_to 'Go Back', home_path, class: 'btn btn-danger btn-block' %>
+    </div>
+  </div>
+<% end %>

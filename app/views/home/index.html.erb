@@ -1,0 +1,41 @@
+<div class="row">
+  <div class="col-sm-12">
+    <%= link_to 'Start New Workout', new_workout_session_path, class: 'btn btn-xl btn-success btn-block' %> 
+  </div>
+</div>
+
+<br>
+
+<% current_user.workout_sessions.order('created_at DESC').each do |workout_session| %>
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <div class="panel-title">
+        <h3><%= workout_session.completed_workout.name %></h3> <small><%= time_ago_in_words workout_session.created_at %> ago</small>
+        <a href="<%= workout_session_path workout_session %>" class="btn btn-xs btn-warning pull-right"><span class="glyphicon glyphicon-edit"></span></a>
+      </div>
+    </div>
+    <table class="table">
+      <tbody>
+        <% workout_session.completed_workout.excersises.each do |excersise| %>
+          <tr class="<%= excersise.was_succesful ? 'success' : 'warning' %>">
+            <td colspan="100">
+              <label><h4><%= excersise.name %></h4></label>
+              <div class="pull-right form-group">
+                <label><h4>Weight: <%= excersise.weight %><%= current_user.weight_units %></h4></label>
+              </div>
+            </td>
+          </tr>
+    
+          <tr class="<%= excersise.was_succesful ? 'success' : 'warning' %>">
+            <% excersise.rep_sets.each do |rep_set| %>
+              <td class="text-center rep-list">
+                <h1><span class="label <%=rep_set.was_started ? 'label-success' : 'label-danger' %>"><%= rep_set.completed_reps %></span></h1>
+              </td>
+            <% end %>
+          </tr>
+    
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>

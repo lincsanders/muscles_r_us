@@ -1,6 +1,23 @@
 // Place all the styles related to the welcome controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
-.asd {
-color: red;
+.navbar-brand {
+	padding: 0px;
+	max-height: 50px;
 }
+.navbar-brand img {
+	max-height: 100%;
+	margin-left: 15px;
+}
+.navbar-toggle {
+	border: none;
+}
+.navbar-toggle:hover, .navbar-toggle:focus {
+	background-color: transparent !important;
+	border: none;
+}
+.navbar-brand .logo-bars {
+	position: absolute;
+	left: -25px;
+}
+

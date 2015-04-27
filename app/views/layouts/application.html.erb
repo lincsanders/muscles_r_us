@@ -7,6 +7,7 @@
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <title>Muscles R Us</title>
     <%= stylesheet_link_tag    'application', media: 'all' %>
+    <%= javascript_include_tag 'application' %>
     <%= csrf_meta_tags %>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -18,87 +19,78 @@
   </head>
   <body>
     <div id="wrapper">
-      <!-- Fixed navbar -->
-      <nav class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-          <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" id="sidebar-toggle">
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="#">
-              <img class="img-responsive" src="logo.png">
-            </a>
-          </div>
-          <div id="navbar" class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-              <li class="active"><a href="#">Home</a></li>
-              <li><a href="#about">About</a></li>
-              <li><a href="#contact">Contact</a></li>
-              <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Dropdown <span class="caret"></span></a>
-                <ul class="dropdown-menu" role="menu">
-                  <li><a href="#">Action</a></li>
-                  <li><a href="#">Another action</a></li>
-                  <li><a href="#">Something else here</a></li>
-                  <li class="divider"></li>
-                  <li class="dropdown-header">Nav header</li>
-                  <li><a href="#">Separated link</a></li>
-                  <li><a href="#">One more separated link</a></li>
-                </ul>
-              </li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-              <li><a href="../navbar/">Default</a></li>
-              <li><a href="../navbar-static-top/">Static top</a></li>
-              <li class="active"><a href="./">Fixed top <span class="sr-only">(current)</span></a></li>
-            </ul>
-          </div><!--/.nav-collapse -->
-        </div>
-      </nav>
-      <!-- /Fixed Navbar -->
+      <% if user_signed_in? %>
+        <!-- Fixed navbar -->
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+          <div class="container">
+            <div class="navbar-header">
+              <a class="navbar-brand sidebar-toggle" href="#">
+                <button type="button" class="navbar-toggle logo-bars">
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                </button>
+                <%= image_tag 'logo.png', class: 'img-responsive' %>
+              </a>
 
-      <!-- Sidebar -->
-      <div id="sidebar-wrapper">
+              <div class="screen-name sidebar-toggle">
+                <h4>Muscles R Us</h4>
+                <small><%= controller.controller_name.humanize %></small>
+              </div>
+
+              <% if false %>
+                <button type="button" class="navbar-toggle dropdown-toggle right-toggle" id="primary-dropdown" data-toggle="dropdown" aria-expanded="true">
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                </button>
+
+                <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="primary-dropdown">
+                  <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Action</a></li>
+                  <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Another action</a></li>
+                  <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Something else here</a></li>
+                  <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Separated link</a></li>
+                </ul>
+              <% end %>
+            </div>
+          </div>
+        </nav>
+        <!-- /Fixed Navbar -->
+
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
           <ul class="sidebar-nav">
-              <li class="sidebar-brand">
-                  <a href="#">
-                      Start Bootstrap
-                  </a>
-              </li>
-              <li>
-                  <a href="#">Dashboard</a>
-              </li>
-              <li>
-                  <a href="#">Shortcuts</a>
-              </li>
-              <li>
-                  <a href="#">Overview</a>
-              </li>
-              <li>
-                  <a href="#">Events</a>
-              </li>
-              <li>
-                  <a href="#">About</a>
-              </li>
-              <li>
-                  <a href="#">Services</a>
-              </li>
-              <li>
-                  <a href="#">Contact</a>
-              </li>
+            <li class="sidebar-brand">
+              <a href="<%=home_path%>">
+                Home
+              </a>
+            </li>
+            <li>
+              <%= link_to 'My Workout Sessions', workout_sessions_path %>
+            </li>
+            <li>
+              <%= link_to 'My Excersises', excersises_path %>
+            </li>
+            <li>
+              <%= link_to 'My Workout Plans', workouts_path %>
+            </li>
+            <li role="presentation" class="divider"></li>
+            <li>
+              <li><%= link_to "Sign out (#{current_user.nickname})", destroy_user_session_path %></li>
+            </li>
           </ul>
-      </div>
-      <!-- /#sidebar-wrapper -->
+        </div>
+        <!-- /#sidebar-wrapper -->
+      <% end %> 
 
       <div id="page-content-wrapper">
         <div class="container-fluid">
+          <%= render partial: "shared/flash_messages", flash: flash %> 
+
           <%= yield %>
         </div>
       </div>
     </div>
 
-  <%= javascript_include_tag 'application' %>
   </body>
 </html>

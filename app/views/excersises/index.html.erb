@@ -1,0 +1,27 @@
+<h1>My Excersises</h1>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Sets</th>
+      <th>Reps</th>
+      <th colspan="1"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @excersises.each do |excersise| %>
+      <tr>
+        <td><%= excersise.name %></td>
+        <td><%= excersise.sets %></td>
+        <td><%= excersise.reps %></td>
+        <td><%= link_to 'Edit', edit_excersise_path(excersise), class: 'btn btn-sm btn-block btn-warning' %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'Create Excersise', new_excersise_path, class: "btn btn-block btn-success" %>

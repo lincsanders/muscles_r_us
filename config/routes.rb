@@ -1,12 +1,20 @@
 Rails.application.routes.draw do
+  resources :workout_sessions
+  resources :workouts
+  resources :excersises
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
-  root 'welcome#index'
+  root 'home#index'
+
+  devise_for :users, controllers: {
+    sessions: 'user/sessions',
+    registrations: 'user/registrations'
+  }
 
   # Example of regular route:
-  #   get 'products/:id' => 'catalog#view'
+  get 'home' => 'home#index', as: :home
 
   # Example of named route that can be invoked with purchase_url(id: product.id)
   #   get 'products/:id/purchase' => 'catalog#purchase', as: :purchase

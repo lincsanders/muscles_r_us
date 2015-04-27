@@ -1,0 +1,85 @@
+<%= form_for(@workout_session, html: {id: 'workout-session-form'}) do |f| %>
+  <%= render 'shared/form_errors', model: @workout_session %>
+
+  <div class="form-group col-xs-12">
+    <%= f.label :workout %><br>
+    <%= f.select :workout_id, current_user.workouts.map{|w| [w.name, w.id]}, {}, id: 'workout-id', class: 'form-control' %>
+  </div>
+
+  <div class="form-group col-xs-12">
+    <%= f.label :weight, 'Your Weight' %><br>
+    <div class="input-group">
+      <%= f.number_field :weight, class: 'form-control text-right', step: 0.5 %>
+      <div class="input-group-addon"><%= current_user.weight_units %></div>
+    </div>
+  </div>
+
+  <%= render 'workout_session_excersises', f: f, workout: @workout_session.workout %>
+
+  <div class="row">
+    <div class="col-xs-6">
+      <%= f.submit 'Finish', class: 'btn btn-xl btn-success btn-block' %>
+    </div>
+    <div class="col-xs-6">
+      <%= link_to 'Cancel', home_path, class: 'btn btn-xl btn-danger btn-block' %>
+    </div>
+  </div>
+<% end %>
+
+<script>
+  $('#workout-id').on('change', function(){
+    window.location = '<%= new_workout_session_path %>?workout_id='+$(this).val();
+  });
+
+  $('#workout-session-form').on('submit', function(e){
+    var $this = $(this),
+      workout = {
+        name: '<%= @workout_session.workout.name %>',
+        excersises: []
+      }
+      formdata = $this.serializeObject();
+
+    formdata['workout_session']['workout_id'] = $('#workout-id').val();
+
+    e.preventDefault();  
+
+    $('.excersise').each(function(){
+      var excersise = {
+        id: $(this).data('id'),
+        name: $(this).data('name'),
+        weight: $($(this).data('weight-selector')).val(),
+        was_succesful: 1,
+        rep_sets: []
+      };
+
+      $(this).find('.set').each(function(){
+        var rep_set = {
+          rep_number: $(this).data('rep-number'),
+          completed_reps: $(this).data('completed-reps'),
+          max_reps: $(this).data('max-reps'),
+          was_started: parseInt($(this).data('started'))
+        }
+
+        if(rep_set.completed_reps < rep_set.max_reps || !rep_set.was_started)
+          excersise.was_succesful = 0;
+
+        excersise.rep_sets.push(rep_set);
+      });
+
+      workout.excersises.push(excersise);
+    });
+
+    formdata['completed_workout'] = workout;
+    console.log(formdata);
+
+    $.ajax({
+      url: '<%= workout_sessions_path %>', 
+      dataType: 'json',
+      method: 'POST',
+      data: formdata
+    })
+      .success(function(data){
+          window.location = '<%= home_path %>';
+      });
+  });
+</script>

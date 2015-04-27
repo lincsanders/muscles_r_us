@@ -1,4 +1,60 @@
- @import "bootstrap-sprockets";
- @import "bootstrap";
- @import "sidebar";
- @import "welcome";
+@import "bootstrap-sprockets";
+@import "bootstrap";
+@import "sidebar";
+@import "welcome";
+@import "bootstrap-select.min";
+
+#page-content-wrapper {
+  padding-top: 65px;
+}
+ 
+#sidebar-wrapper {
+  height: calc(100% - 50px);
+  margin-top: 50px;
+}
+
+.sidebar-toggle {
+  cursor: pointer;
+}
+
+.btn-xl {  
+  padding: 15px 22px;
+  font-size: 24px;
+  line-height: 1.33;
+  border-radius: 6px
+}
+
+.field_with_errors {
+  @extend .has-error;
+}
+
+.rep-list {
+  padding-top: 0px !important;
+  border-top: none !important;
+}
+
+body {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.weight-input {
+  width: 200px;
+  input {
+    text-align: right;
+  }
+}
+
+.screen-name {
+  color: #fefefe;
+  padding-left: 80px;
+
+  h4 {
+    margin-top: 7px;
+    margin-bottom: 0px;
+  }
+}

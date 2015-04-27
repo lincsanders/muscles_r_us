@@ -1,0 +1,29 @@
+<%= form_for(@workout) do |f| %>
+  <%= render 'shared/form_errors', model: @workout %>
+
+  <div class="form-group">
+    <%= f.label :name %><br>
+    <%= f.text_field :name, class: 'form-control' %>
+  </div>
+
+  <h4>Excersises</h4>
+  <div class="form-group">
+    <% current_user.excersises.each do |excersise| %>
+      <div class="checkbox">
+        <label>
+          <%= check_box_tag "excersises[#{excersise.id}]", excersise.id, @workout.excersises.include?(excersise) %>
+          <%= excersise.name %>
+        </label>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-6">
+      <%= f.submit class: 'btn btn-success btn-block' %>
+    </div>
+    <div class="col-xs-6">
+      <%= link_to 'Cancel', workouts_path, class: 'btn btn-danger btn-block' %>
+    </div>
+  </div>
+<% end %>

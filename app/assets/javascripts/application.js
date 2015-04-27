@@ -11,11 +11,22 @@
 // about supported directives.
 //
 //= require jquery
+//= require notify
 //= require bootstrap-sprockets
 //= require jquery_ujs
 //= require_tree .
 
-$("#sidebar-toggle").click(function(e) {
-	e.preventDefault();
-	$("#wrapper").toggleClass("toggled");
+$(function(){
+	$(".sidebar-toggle, .sidebar-nav a").click(function(e) {
+		var $this = $(this);
+		e.preventDefault();
+		$("#wrapper").toggleClass("toggled");
+		setTimeout(function(){
+			if($this.attr('href') && $this.attr('href') != '#'){
+				window.location = $this.attr('href');
+			}
+		}, 200);
+	});
+
+	$('select').selectpicker();
 });

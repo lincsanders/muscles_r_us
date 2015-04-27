@@ -1,0 +1,28 @@
+<h1>My Workouts</h1>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th colspan="1"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @workouts.each do |workout| %>
+      <tr>
+        <td><%= workout.name %></td>
+        <td><%= link_to 'Edit', edit_workout_path(workout), class: 'btn btn-sm btn-block btn-warning' %></td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          <strong><%= pluralize(workout.excersises.count, "Excersise") %>:</strong> <%= workout.excersises.map{|e|e.name}.join(', ') %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'Create Workout Plan', new_workout_path, class: 'btn btn-block btn-success' %>

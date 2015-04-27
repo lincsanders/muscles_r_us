@@ -1,0 +1,80 @@
+<table class="table">
+  <tbody>
+    <% workout.excersises.each do |excersise| %>
+
+      <tr class="excersise-row-<%=excersise.id%>">
+        <td colspan="100">
+          <label><h4><%= excersise.name %></h4></label>
+
+          <div class="pull-right form-group weight-input">
+            <div class="input-group">
+              <div class="input-group-addon">Weight:</div>
+              <input type="number" class="form-control" step="<%= current_user.weight_increment %>" value="<%= excersise.next_weight %>" id="excersise-weight-<%=excersise.id%>">
+              <div class="input-group-addon"><%= current_user.weight_units %></div>
+            </div>
+          </div>
+        </td>
+      </tr>
+
+      <tr class="excersise-row-<%=excersise.id%> excersise" data-name="<%=excersise.name%>" data-id="<%=excersise.id%>" data-weight-selector="#excersise-weight-<%=excersise.id%>">
+        <% excersise.rep_sets.each_with_index do |rep_set, i| %>
+          <td class="text-center rep-list">
+            <h1><span data-rep-number="<%=i%>" class="label label-danger set" data-row-selector=".excersise-row-<%=excersise.id%>" data-max-reps="<%=excersise.reps%>" data-completed-reps="0" data-started="0"><%= excersise.reps %></span></h1>
+          </td>
+        <% end %>
+      </tr>
+
+    <% end %>
+  </tbody>
+</table>
+
+<script>
+var timer = null,
+  timerStartedAt = null;
+
+$('.set').on('click', function(){
+  $('#workout-id').attr('disabled', 'disabled');
+  $('#workout-id').selectpicker('refresh');
+
+  var $this = $(this),
+    $excersiseRows = $('tr'+$this.data('row-selector')),
+    currentReps = parseInt($this.html()),
+    maxReps = $this.data('max-reps');
+
+  if(!timer){
+    timerStartedAt = Date.now();
+    
+    timer = setInterval(function(){
+      if((Date.now() - timerStartedAt) > (5 * 1000)){ //Timestamp in ms
+        console.log('Timeup');
+        var notification = new Notification('Muscles R Us', {
+          icon: '<%= asset_path 'logo-dark.png' %>',
+          body: '30 seconds since last set!'
+        });
+        notification.onclick = function(x){
+          window.focus();
+        }
+        clearInterval(timer);
+      }
+    }, 250)
+  }
+
+  // Modify the number
+  if($this.hasClass('label-danger')){
+    $this.removeClass('label-danger');
+    $this.addClass('label-success');
+    $this.data('completed-reps', maxReps);
+  } else if(currentReps == 0) {
+    $this.data('completed-reps', maxReps);
+  } else {
+    $this.data('completed-reps', (currentReps-1));
+  }
+
+  $this.html($this.data('completed-reps'));
+  $this.data('started', 1);
+
+  //Set the excersise row to green if all excersises are done
+  if($this.parent().parent().parent().find('.label-danger').length <= 0)
+    $excersiseRows.addClass('success');
+});
+</script>

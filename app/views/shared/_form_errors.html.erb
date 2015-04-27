@@ -1,0 +1,5 @@
+<% if model.errors.any? %>
+<div class="row alert alert-danger">
+  <strong><%= pluralize(model.errors.count, "problem") %>:</strong> <%= model.errors.full_messages.join(', ') %>
+</div>
+<% end %>
